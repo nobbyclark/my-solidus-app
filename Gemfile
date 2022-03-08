@@ -54,3 +54,21 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+gem 'solidus_core'
+gem 'solidus_api'
+gem 'solidus_backend'
+gem 'solidus_sample'
+gem 'solidus_auth_devise'
+gem 'canonical-rails'
+gem 'solidus_support'
+gem 'truncate_html'
+gem 'view_component', require: 'view_component/engine'
+
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'apparition', '~> 0.6.0'
+  gem 'rails-controller-testing', '~> 1.0.5'
+  gem 'rspec-activemodel-mocks', '~> 1.1.0'
+  gem 'solidus_dev_support', '~> 2.5'
+end
