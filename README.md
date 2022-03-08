@@ -1,6 +1,6 @@
 # My Solidus App
 
-1.`git clone https://github.com/nobbyclark/my-solidus-app.git`
+1. `git clone https://github.com/nobbyclark/my-solidus-app.git`
 2. `cd my-soldius-app`
 3. `bundle`
 4. `yarn`
