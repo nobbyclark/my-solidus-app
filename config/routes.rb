@@ -1,5 +1,38 @@
 # frozen_string_literal: true
 
+Rails.application.routes.draw do
+  # This line mounts Solidus's routes at the root of your application.
+  # This means, any requests to URLs such as /products, will go to Spree::ProductsController.
+  # If you would like to change where this engine is mounted, simply change the :at option to something different.
+  #
+  # We ask that you don't use the :as option here, as Solidus relies on it being the default of "spree"
+  mount Spree::Core::Engine, at: '/'
+
+  direct :cdn_image do |model, options|
+    if model.respond_to?(:signed_id)
+      route_for(
+        :rails_service_blob_proxy,
+        model.signed_id,
+        model.filename,
+        options.merge(host: ENV['CDN_HOST'])
+      )
+    else
+      signed_blob_id = model.blob.signed_id
+      variation_key  = model.variation.key
+      filename       = model.blob.filename
+  
+      route_for(
+        :rails_blob_representation_proxy,
+        signed_blob_id,
+        variation_key,
+        filename,
+        options.merge(host: ENV['CDN_HOST'])
+      )
+    end
+  end
+  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+end
+
 Spree::Core::Engine.routes.draw do
   root to: 'home#index'
 
@@ -63,14 +96,4 @@ Spree::Core::Engine.routes.draw do
 
   get '/unauthorized', to: 'home#unauthorized', as: :unauthorized
   get '/cart_link', to: 'store#cart_link', as: :cart_link
-end
-Rails.application.routes.draw do
-  # This line mounts Solidus's routes at the root of your application.
-  # This means, any requests to URLs such as /products, will go to Spree::ProductsController.
-  # If you would like to change where this engine is mounted, simply change the :at option to something different.
-  #
-  # We ask that you don't use the :as option here, as Solidus relies on it being the default of "spree"
-  mount Spree::Core::Engine, at: '/'
-
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
